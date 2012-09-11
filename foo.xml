@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="ExternalVoucherCodesTests" file="/Applications/MAMP/htdocs/evc/Test.php" tests="3" assertions="3" failures="0" errors="0" time="1.428030">
+    <testcase name="testConnectionIsValid" class="ExternalVoucherCodesTests" file="/Applications/MAMP/htdocs/evc/Test.php" line="9" assertions="1" time="1.426916"/>
+    <testcase name="testExecutionTime" class="ExternalVoucherCodesTests" file="/Applications/MAMP/htdocs/evc/Test.php" line="16" assertions="1" time="0.000605"/>
+    <testcase name="testVoucherCodeFormat" class="ExternalVoucherCodesTests" file="/Applications/MAMP/htdocs/evc/Test.php" line="21" assertions="1" time="0.000509"/>
+  </testsuite>
+</testsuites>
