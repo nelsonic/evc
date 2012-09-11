@@ -7,3 +7,9 @@ The generate codes method accepts 3 parameters:
  - Number of Codes (to be generated)
  - Format for Codes (PREFIX*****)
  - CDA (the ID of the object in Salesforce)
+ 
+ ### 
+ 
+ To run the tests you will need PHPUnit installed on your machine
+     phpunit --log-junit foo.xml Test.php
+     xsltproc foo.xsl foo.xml > output.html
