@@ -18,7 +18,7 @@
 
 /*************************** Salesforce Credentials *********************************/
 
-define("USERNAME", "nelson.correia@groupon.co.uk");
+define("USERNAME", "nelson.correia@groupon.com");
 define("PASSWORD", "password");
 define("SECURITY_TOKEN", "sdfhkjwrhgfwrgergp");
 
