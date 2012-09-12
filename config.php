@@ -15,4 +15,11 @@
 		if(mysql_select_db(DBNAME, $db)) {	return $db; }
 		} catch (Exception $e) { echo 'Caught exception: ',  $e->getMessage(), "\n";
 	} // END try block
+
+/*************************** Salesforce Credentials *********************************/
+
+define("USERNAME", "nelson.correia@groupon.co.uk");
+define("PASSWORD", "password");
+define("SECURITY_TOKEN", "sdfhkjwrhgfwrgergp");
+
 ?>
