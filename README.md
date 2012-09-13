@@ -16,6 +16,7 @@ The generate codes method accepts 3 parameters:
  
  This module uses the Salesforce API to write data back to SF.
  See: https://github.com/developerforce/Force.com-Toolkit-for-PHP
+ http://wiki.developerforce.com/page/Getting_Started_with_the_Force.com_Toolkit_for_PHP
    
  You will need to re-generate the soap/wsdl file in salesforce to get the latest Custom Object Definitions (if the DB object you are writing to in SF has changed.
 
