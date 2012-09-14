@@ -64,7 +64,7 @@ class Codes
 	}	
 	public function connectMySQL() {
 		$db = mysql_connect(DBHOST,DBUSER,DBPASS);
-		if(mysql_select_db(DBNAME, $db)) {	return $db; }
+		if(mysql_select_db(DBNAME, $db)) { return $db; }
 	}
   
 	public function generateCode() {
@@ -94,7 +94,7 @@ class Codes
 		$code = mysql_real_escape_string($code);
 		$num_rows = mysql_num_rows( mysql_query("SELECT * FROM ".DBTABLE." WHERE voucher_code = '$code'") );
 		if ($num_rows < 1) {
-			$insert = "INSERT INTO ".DBTABLE ." SET voucher_code ='".$code."', cda='".CDA ."';";
+			$insert = "INSERT INTO ".DBTABLE ." SET voucher_code ='$code', cda='".CDA ."';";
 			if(mysql_query($insert)) {
 				return true;
 			} else { return false; }

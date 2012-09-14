@@ -10,7 +10,7 @@ require_once('./Force.com-Toolkit-for-PHP/soapclient/SforceEnterpriseClient.php'
 
 $mySforceConnection = new SforceEnterpriseClient();
 $wsdl = './test.enterprise.wsdl.xml';
-$wsdl = './enterprise.wsdl.xml';
+//$wsdl = './enterprise.wsdl.xml';
 $mySforceConnection->createConnection($wsdl);
 $mySforceConnection->login(USERNAME, PASSWORD.SECURITY_TOKEN);
 
@@ -20,9 +20,9 @@ echo "<pre>";
 $query = "SELECT Id FROM ContractDealAttribute__c LIMIT 1";
 $response = $mySforceConnection->query($query);
 
-echo "Results of query '$query'<br/><br/>\n";
+//echo "Results of query '$query'<br/><br/>\n";
 foreach ($response->records as $record) {
-    echo $record->Id ." - "  ."<br/>\n";
+//    echo $record->Id ." - "  ."<br/>\n";
     $cda = $record->Id;
 }
 
@@ -30,6 +30,11 @@ foreach ($response->records as $record) {
 
 require_once('./codes.php');
 $C = new Codes();
+// $C->format = $_GET['format'];
+$C->prefix = $C->getPrefix($C->format);
+$C->__construct();
+$C->num_random_chars = strlen($C->format) - strlen($C->prefix);
+
 $codes = $C->generateMany($number_of_codes);
 //print_r($codes);
 
@@ -54,16 +59,21 @@ $response = $mySforceConnection->create($records, 'External_Voucher_Code__c');
 
 /************************** Confirm External_Voucher_Code__c inserted : **************************/
 
-$query = "SELECT Id, Contract_Deal_Attribute__c, Voucher_Code__c from External_Voucher_Code__c LIMIT 100";
+$query = "SELECT Id, Contract_Deal_Attribute__c, Voucher_Code__c from External_Voucher_Code__c where Contract_Deal_Attribute__c='" .$cda ."' ORDER BY CreatedDate DESC";
 $response = $mySforceConnection->query($query);
 
-echo "Results of query '$query'<br/><br/>\n";
+//echo "Results of query '$query'<br/><br/>\n";
 foreach ($response->records as $record) {
-    echo "Id: " .$record->Id ."<br />CDA: " .$record->Contract_Deal_Attribute__c ." <br />Codes: " .$record->Voucher_Code__c ."<br/>\n";
+    echo "Id: " .$record->Id ."<br />";
+    if(isset($record->Contract_Deal_Attribute__c)) { 
+    	echo "CDA: " .$record->Contract_Deal_Attribute__c ." <br />";
+    }	
+    echo "Codes: " .$record->Voucher_Code__c ."<br/>\n";
 }
 
 // To DELETE the data you just inserted run:
 // DELETE FROM External_Voucher_Code__c WHERE Contract_Deal_Attribute__c='a1G20000000PigOEAS'
+/*
 $query = "SELECT Id FROM External_Voucher_Code__c WHERE Contract_Deal_Attribute__c='a1G20000000PigOEAS'";
 $response = $mySforceConnection->query($query);
 //print_r($response->records);
@@ -83,5 +93,6 @@ $response = $mySforceConnection->delete($ids);
 foreach ($response as $result) {
     echo $result->id . " deleted<br/>\n";
 }
+*/
 
 ?>
