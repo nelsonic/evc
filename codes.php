@@ -35,23 +35,37 @@ class Codes
 {	
 	public $characters;
 	public $num_random_chars;
+	public $format;
 	public $prefix;
+	public $db;
 
 	function __construct() { // sets the above vars
   		$this->characters = explode(",", CHARACTERS_FOR_VOUCHER_CODES);	
-  		$this->num_random_chars = strlen(FORMAT) - strlen($this->prefix);
-  		$this->prefix = $this->getPrefix(FORMAT);
+  		$this->format = FORMAT;
+  		$num_rand = strlen($this->format) - strlen($this->prefix);
+  		if($num_rand < 6) { $num_rand = 6;  }
+  		$this->num_random_chars = $num_rand;
+  		$this->prefix = $this->setPrefix($this->format);
+  		$this->db = $this->connectMySQL();
 	}
 
-	public function getPrefix() {
-		$parts = preg_split("/\*/", FORMAT);
+	public function getPrefix($format) {
+		$parts = preg_split("/\*/", $format);
 		return $parts[0]; // returns only the string before the first '*'
+	}
+	public function setPrefix($format) {
+		$this->prefix = $this->getPrefix($format);
+		return $this->prefix;	
 	}
   
 	public function randomCharacter() {
 		$rand = rand(0,NUM_CHARS-1);
 		return $this->characters[$rand];
 	}	
+	public function connectMySQL() {
+		$db = mysql_connect(DBHOST,DBUSER,DBPASS);
+		if(mysql_select_db(DBNAME, $db)) {	return $db; }
+	}
   
 	public function generateCode() {
 		$code = '';
@@ -67,7 +81,7 @@ class Codes
 	  $codes = Array();
 	  $i = 0;
 	  while($i < $number_of_codes) {
-	    $code     = $this->generateCode();
+	    $code = $this->generateCode();
 	    if($this->codeIsNew($code)) { 
 	      	array_push($codes, $code);
 	      }
@@ -78,19 +92,13 @@ class Codes
   
 	public function codeIsNew($code) {
 		$code = mysql_real_escape_string($code);
-		$sql = "SELECT COUNT(*) FROM ".DBTABLE ." WHERE voucher_code = '".$code."'";
-		if (mysql_query($sql)) {  //     echo "<p> $code not present </p>";
+		$num_rows = mysql_num_rows( mysql_query("SELECT * FROM ".DBTABLE." WHERE voucher_code = '$code'") );
+		if ($num_rows < 1) {
 			$insert = "INSERT INTO ".DBTABLE ." SET voucher_code ='".$code."', cda='".CDA ."';";
 			if(mysql_query($insert)) {
 				return true;
-			} else {
-				echo 'Query FAILED :: ' .$sql .'MySQL Error :: ' . mysql_error();
-				return false;
-			}
-		} else {
-			echo 'Query FAILED :: ' .$sql .'MySQL Error :: ' . mysql_error();
-			return false;
-		}
+			} else { return false; }
+		} else     { return false; }
 	}  
 } // END class Codes
 ?>
