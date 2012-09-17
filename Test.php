@@ -51,10 +51,10 @@ class ExternalVoucherCodesTests extends PHPUnit_Framework_TestCase
 	 $prefix = $C->setPrefix($format);	
 	 $C->num_random_chars = strlen($format) - strlen($C->prefix);
 	 $code = $C->generateCode();
-     $start = strlen($C->prefix);
+	 $start = strlen($C->prefix);
      $random_part = substr($code,$start);
      $random_char_count = substr_count($format, '*');
-     echo "## ".$code ." | start: " .$start ." | random: " .$random_part;
+//     echo "## ".$code ." | start: " .$start ." | random: " .$random_part;
   	 $this->assertTrue( strlen($random_part) == $random_char_count && ($prefix === 'ABC') );
   }
   public function testCodeIsNew() {
@@ -77,9 +77,9 @@ class ExternalVoucherCodesTests extends PHPUnit_Framework_TestCase
   	 $code_length = strlen($codes[0]);
   	 $prep  = $C->prepareCodesForInsert($codes);
   	 $c = ceil ( $num_codes * ( $code_length + 1 ) / $C->fieldlength );
-  	 echo "\n | first code : $codes[0] ";
-  	 echo " | num_codes : $num_codes ";
-  	 echo " | code_length : $code_length \n";
+//  	 echo "\n | first code : $codes[0] ";
+//  	 echo " | num_codes : $num_codes ";
+//  	 echo " | code_length : $code_length \n";
   	 print_r($prep);
   	 // we expect the number of strings of codes to be 11
   	 $this->assertTrue(count($prep) == $c);
