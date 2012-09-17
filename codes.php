@@ -18,6 +18,7 @@
  */
 
 require_once('./config.php'); // contains the DB credentials and connection
+$db = mysql_connect(DBHOST,DBUSER,DBPASS); // need a connection for mysql_real_escape_string !! :-(
 
 // Defaults:
 define('DEFAULT_NUMCODES', 20);
@@ -25,8 +26,8 @@ define('CHARACTERS_FOR_VOUCHER_CODES', 'A,B,C,D,E,F,G,H,J,K,L,M,N,P,Q,R,T,U,V,W,
 define('NUM_CHARS', (strlen(CHARACTERS_FOR_VOUCHER_CODES)+1)/2);
 
 // get variables
-$format = (isset($_GET['format']) ? mysql_real_escape_string($_GET['format']) : '********');
-define('FORMAT', $format);
+// $format = (isset($_GET['format']) ? mysql_real_escape_string($_GET['format']) : '********');
+// define('FORMAT', $format);
 $number_of_codes = (isset($_GET['numcodes']) ? mysql_real_escape_string($_GET['numcodes']) : DEFAULT_NUMCODES);
 $cda = (isset($_GET['cda']) ? mysql_real_escape_string($_GET['cda']) : 'a1G20000000PigOEAS');
 define('CDA', $cda);
@@ -38,15 +39,17 @@ class Codes
 	public $format;
 	public $prefix;
 	public $db;
+	public $fieldlength;
 
 	function __construct() { // sets the above vars
   		$this->characters = explode(",", CHARACTERS_FOR_VOUCHER_CODES);	
-  		$this->format = FORMAT;
+  		$this->format = (isset($_GET['format']) ? mysql_real_escape_string($_GET['format']) : '********');
   		$num_rand = strlen($this->format) - strlen($this->prefix);
-  		if($num_rand < 6) { $num_rand = 6;  }
+  		if($num_rand < 4) { $num_rand = 4;  }
   		$this->num_random_chars = $num_rand;
   		$this->prefix = $this->setPrefix($this->format);
   		$this->db = $this->connectMySQL();
+  		$this->fieldlength = 32768;
 	}
 
 	public function getPrefix($format) {
@@ -100,5 +103,27 @@ class Codes
 			} else { return false; }
 		} else     { return false; }
 	}  
+	
+	// because the maximum length for a salesforce string is   Long Text Area(32768)
+	// we can only insert this many characters
+	public function prepareCodesForInsert($codes) {
+		$num_codes = count($codes);
+		$code_length = strlen($codes[0]);
+		$c = ceil ( $num_codes * ( $code_length + 1 ) / $this->fieldlength );
+		$prep = Array();
+		$i = $num_codes-1;
+		while($c >= 0) {
+			$codestring = ''; // reset
+			while($i >= 0 && strlen($codestring) <= $this->fieldlength-$code_length-1) {
+				$codestring .= $codes[$i] .',';
+				$i--;
+			}
+			$codestring = substr($codestring, 0, -1); // remove last ','
+			if(strlen($codestring)>0) { array_push($prep, $codestring); }
+			$c--;
+		}
+		return $prep;
+	}
+	
 } // END class Codes
 ?>

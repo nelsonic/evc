@@ -57,7 +57,7 @@ class ExternalVoucherCodesTests extends PHPUnit_Framework_TestCase
      echo "## ".$code ." | start: " .$start ." | random: " .$random_part;
   	 $this->assertTrue( strlen($random_part) == $random_char_count && ($prefix === 'ABC') );
   }
-    public function testCodeIsNew() {
+  public function testCodeIsNew() {
   	 $C = new Codes();
 	 $not_new_code = $C->generateCode();
 	 $C->codeIsNew($not_new_code);
@@ -66,7 +66,24 @@ class ExternalVoucherCodesTests extends PHPUnit_Framework_TestCase
 	 $existing_code = 'RICK9TQX4H';
   	 $this->assertTrue($C->codeIsNew($existing_code) == false);
   }
-  
+  public function testPrepareCodes() {
+  	 $C = new Codes();
+  	 $C->format = "ABC******"; // 9 characters + ',' will be 10 chars
+	 $C->prefix = $C->setPrefix($C->format);	
+	 $C->num_random_chars = strlen($C->format) - strlen($C->prefix);
+  	 $C->fieldlength = 100; // sets fieldlength artifically low just for test usually 32768
+  	 $num_codes = 101;
+  	 $codes = $C->generateMany($num_codes);
+  	 $code_length = strlen($codes[0]);
+  	 $prep  = $C->prepareCodesForInsert($codes);
+  	 $c = ceil ( $num_codes * ( $code_length + 1 ) / $C->fieldlength );
+  	 echo "\n | first code : $codes[0] ";
+  	 echo " | num_codes : $num_codes ";
+  	 echo " | code_length : $code_length \n";
+  	 print_r($prep);
+  	 // we expect the number of strings of codes to be 11
+  	 $this->assertTrue(count($prep) == $c);
+  }
   
   public function testExecutionTime() {
   	$this->assertTrue(true !== false);
