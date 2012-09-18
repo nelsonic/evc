@@ -8,6 +8,9 @@ The generate codes method accepts 3 parameters:
  - Format for Codes (PREFIX*****)
  - CDA (the ID of the object in Salesforce)
  
+ e.g: 
+ >> http://localhost/evc/?format=TEST******&cda=a1GP00000000WwuMAE&numcodes=100
+ 
  ### 
 
 The main class/code is located in **codes.php**. Each method is tested in **Test.php**.
