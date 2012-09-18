@@ -16,7 +16,7 @@ $mySforceConnection->login(USERNAME, PASSWORD.SECURITY_TOKEN);
 
 
 /************************** SELECT CDA_id **************************/
-/*
+/* */
 echo "<pre>";
 $query = "SELECT Id FROM ContractDealAttribute__c LIMIT 1";
 $response = $mySforceConnection->query($query);
@@ -26,20 +26,20 @@ foreach ($response->records as $record) {
 //    echo $record->Id ." - "  ."<br/>\n";
     $cda = $record->Id;
 }
-*/
+
 
 /************************** GENERATE SOME CODES **************************/
 
 require_once('./codes.php');
 $C = new Codes();
-// $C->format = $_GET['format'];
-//$C->prefix = $C->getPrefix($C->format);
-//$C->__construct();
-//$C->num_random_chars = strlen($C->format) - strlen($C->prefix);
-//$C->fieldlength = 100; // sets fieldlength artifically low just for test usually 32768
+ $C->format = $_GET['format'];
+$C->prefix = $C->getPrefix($C->format);
+$C->__construct();
+$C->num_random_chars = strlen($C->format) - strlen($C->prefix);
+$C->fieldlength = 100; // sets fieldlength artifically low just for test usually 32768
 $codes = $C->generateMany($number_of_codes);
 $prep  = $C->prepareCodesForInsert($codes);
-//print_r($codes);
+print_r($codes);
 
 
 /************************** INSERT DATA INTO SF **************************/
@@ -65,7 +65,6 @@ print_r(json_encode($response));
 
 /************************** Confirm External_Voucher_Code__c inserted : **************************/
 
-/*
 $query = "SELECT Id, Contract_Deal_Attribute__c, Voucher_Code__c from External_Voucher_Code__c where Contract_Deal_Attribute__c='" .$cda ."' ORDER BY CreatedDate DESC";
 $response = $mySforceConnection->query($query);
 //print_r($response);
@@ -79,9 +78,10 @@ foreach ($response->records as $record) {
     }	
     echo "Codes: " .$record->Voucher_Code__c ."<br/>\n";
 }
-*/
 
-// To DELETE the data you just inserted run:
+
+/************************** To DELETE the DUMMY data you just inserted : **************************/
+
 // DELETE FROM External_Voucher_Code__c WHERE Contract_Deal_Attribute__c='a1G20000000PigOEAS'
 /*
 $query = "SELECT Id FROM External_Voucher_Code__c WHERE Contract_Deal_Attribute__c='a1G20000000PigOEAS'";

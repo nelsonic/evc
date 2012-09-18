@@ -9,8 +9,12 @@ The generate codes method accepts 3 parameters:
  - CDA (the ID of the object in Salesforce)
  
  ### 
- 
-To run the tests you will need PHPUnit installed on your machine
+
+The main class/code is located in **codes.php**. Each method is tested in Test.php.
+The class is instantiated and used to write to Salesforce in index.php.
+//if you want to play with the Salesforce SOAP API open the force.php file and edit/run till you "get" it.
+
+To run the tests you will need PHPUnit installed on your machine. ( if you don't already have it, google for it!) then issue these two commands from command line:
 
 	phpunit --log-junit foo.xml Test.php
 	xsltproc foo.xsl foo.xml > output.html 
