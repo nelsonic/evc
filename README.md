@@ -10,10 +10,10 @@ The generate codes method accepts 3 parameters:
  
  ### 
  
- To run the tests you will need PHPUnit installed on your machine
-```phpunit --log-junit foo.xml Test.php
-xsltproc foo.xsl foo.xml > output.html 
-```
+To run the tests you will need PHPUnit installed on your machine
+  phpunit --log-junit foo.xml Test.php
+  xsltproc foo.xsl foo.xml > output.html 
+
  
  This module uses the Salesforce API to write data back to SF.
  See: https://github.com/developerforce/Force.com-Toolkit-for-PHP
