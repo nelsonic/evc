@@ -88,7 +88,7 @@ class ExternalVoucherCodesTests extends PHPUnit_Framework_TestCase
   public function testExecutionTime() {
   	$this->assertTrue(true !== false);
 	define('END', microtime());
-	print 'hello ' .END .' - ' .START .' = ' .END-START;
+	print 'EXEC TIME ' .END .' - ' .START .' = ' .END-START .' ms';
   }
   
 }
